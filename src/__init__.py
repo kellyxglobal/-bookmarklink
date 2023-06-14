@@ -14,7 +14,7 @@ def create_app(test_config=None):
         )
     else:
         app.config.from_mapping(test_config)
-
+    """
     @app.get("/")
     def index():
         return "Hello world"
@@ -22,5 +22,8 @@ def create_app(test_config=None):
     @app.get("/hello")
     def say_hello():
         return {"message": "Hello world"}
+    """
+
+    # Creating blueprints for a users and bookmarks blueprint by creating auth.py file in the src folder and importing blueprint
 
     return app
