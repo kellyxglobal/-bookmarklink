@@ -1,5 +1,7 @@
-from flask import Flask
+from flask import Flask, jsonify
 import os
+from src.auth import auth
+from src.bookmarks import bookmarks
 
 def create_app(test_config=None):
 
@@ -25,5 +27,7 @@ def create_app(test_config=None):
     """
 
     # Creating blueprints for a users and bookmarks blueprint by creating auth.py file in the src folder and importing blueprint
-
+    app.register_blueprint(auth)
+    app.register_blueprint(bookmarks) 
+    
     return app
