@@ -2,7 +2,7 @@ from src.constants.http_status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_
 from flask import Blueprint, app, request, jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
 import validators
-from flask_jwt_extended import create_access_token,create_refresh_token
+from flask_jwt_extended import jwt_required, create_access_token, create_refresh_token, get_jwt_identity
 
 from src.database import User, db
 #Blueprint for users' authentication
@@ -66,7 +66,7 @@ def login():
 
         if is_pass_correct:
             refresh = create_refresh_token(identity=user.id)
-            access = create_refresh_token(identity=user.id)
+            access = create_access_token(identity=user.id)
 
             return jsonify({
                 'user': {
@@ -80,5 +80,25 @@ def login():
     return jsonify({'error':'Wrong credentials'}), HTTP_401_UNAUTHORIZED
 
 @auth.get("/me")
-def user():
-    return jsonify({'me': "Message"})
+#jwt_required decorator is used to protect routes or endpoints in my Flask application, 
+# ensuring that only authenticated users with valid JWTs can access them
+@jwt_required()
+def me():
+    user_id = get_jwt_identity()
+    user = User.query.filter_by(id=user_id).first()
+    return jsonify({
+        'username': user.username,
+        'email': user.email
+    }), HTTP_200_OK
+
+
+@auth.post('/token/refresh')
+#Refreshing the access token
+@jwt_required(refresh=True)
+def refresh_users_token():
+    identity = get_jwt_identity()
+    access = create_access_token(identity=identity)
+
+    return jsonify({
+        'access': access
+    }), HTTP_200_OK
