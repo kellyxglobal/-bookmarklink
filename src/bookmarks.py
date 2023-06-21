@@ -2,7 +2,7 @@ from src.constants.http_status_codes import HTTP_400_BAD_REQUEST, HTTP_409_CONFL
 from flask import Blueprint, request
 from flask.json import jsonify
 import validators
-from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from src.database import Bookmark, db
 
 #Blueprint for users' authentication
@@ -38,17 +38,17 @@ def handle_bookmarks():
         
         bookmark=Bookmark(url=url, body=body, user_id=current_user)
         db.session.add(bookmark)
-        db.session.commit
+        db.session.commit()
 
         return jsonify({
 
-            'id':bookmark.id,
-            'url':bookmark.url,
-            'short_url':bookmark.short_url,
-            'visit':bookmark.visits,
-            'body':bookmark.body,
-            'created_at':bookmark.created_at,
-            'updated_at':bookmark.updated_at
+            'id': bookmark.id,
+            'url': bookmark.url,
+            'short_url': bookmark.short_url,
+            'visit': bookmark.visits,
+            'body': bookmark.body,
+            'created_at': bookmark.created_at,
+            'updated_at': bookmark.updated_at,
         }), HTTP_201_CREATED
     
     else:
@@ -58,13 +58,13 @@ def handle_bookmarks():
 
         for bookmark in bookmarks:
             data.append({
-                'id':bookmark.id,
-                'url':bookmark.url,
-                'short_url':bookmark.short_url,
-                'visit':bookmark.visits,
-                'body':bookmark.body,
-                'created_at':bookmark.created_at,
-                'updated_at':bookmark.updated_at
+                'id': bookmark.id,
+                'url': bookmark.url,
+                'short_url': bookmark.short_url,
+                'visit': bookmark.visits,
+                'body': bookmark.body,
+                'created_at': bookmark.created_at,
+                'updated_at': bookmark.updated_at,
             })
 
         return jsonify({'data': data}), HTTP_200_OK
