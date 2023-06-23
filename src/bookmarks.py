@@ -1,4 +1,4 @@
-from src.constants.http_status_codes import HTTP_400_BAD_REQUEST, HTTP_409_CONFLICT, HTTP_201_CREATED, HTTP_200_OK
+from src.constants.http_status_codes import HTTP_400_BAD_REQUEST, HTTP_409_CONFLICT, HTTP_201_CREATED, HTTP_200_OK, HTTP_404_NOT_FOUND
 from flask import Blueprint, request
 from flask.json import jsonify
 import validators
@@ -52,7 +52,7 @@ def handle_bookmarks():
         }), HTTP_201_CREATED
     
     else:
-
+        #Paginating and retrieving  data
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 5, type=int)
 
@@ -84,3 +84,23 @@ def handle_bookmarks():
             }
 
         return jsonify({'data': data, "meta": meta}), HTTP_200_OK
+
+#Creating a page that can retrieve single item.
+@bookmarks.get("/<int:id>")
+@jwt_required()
+def get_bookmark(id):
+    current_user = get_jwt_identity()
+
+    bookmark = Bookmark.query.filter_by(user_id=current_user, id=id).first()
+
+    return jsonify({'message':'Item not found'}), HTTP_404_NOT_FOUND
+    
+    return jsonify({
+            'id': bookmark.id,
+            'url': bookmark.url,
+            'short_url': bookmark.short_url,
+            'visit': bookmark.visits,
+            'body': bookmark.body,
+            'created_at': bookmark.created_at,
+            'updated_at': bookmark.updated_at,
+        }), HTTP_200_OK 
