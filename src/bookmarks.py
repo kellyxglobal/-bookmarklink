@@ -1,4 +1,4 @@
-from src.constants.http_status_codes import HTTP_400_BAD_REQUEST, HTTP_409_CONFLICT, HTTP_201_CREATED, HTTP_200_OK, HTTP_404_NOT_FOUND
+from src.constants.http_status_codes import HTTP_400_BAD_REQUEST, HTTP_409_CONFLICT, HTTP_201_CREATED, HTTP_200_OK, HTTP_404_NOT_FOUND, HTTP_204_NO_CONTENT
 from flask import Blueprint, request
 from flask.json import jsonify
 import validators
@@ -106,7 +106,8 @@ def get_bookmark(id):
             'updated_at': bookmark.updated_at,
         }), HTTP_200_OK 
 
-
+#Editing an item and updating the single item. via PUT or PATCH Method
+#http://127.0.0.1:8000/api/v1/bookmarks/19
 @bookmarks.put('/<int:id>')
 @bookmarks.patch('/<int:id>')
 @jwt_required()
@@ -141,3 +142,22 @@ def editbookmark(id):
             'created_at': bookmark.created_at,
             'updated_at': bookmark.updated_at,
         }), HTTP_200_OK
+
+
+
+
+#Deleting a retrieved single item.
+@bookmarks.delete("/<int:id>")
+@jwt_required()
+def delete_bookmark(id):
+    current_user = get_jwt_identity()
+
+    bookmark = Bookmark.query.filter_by(user_id=current_user, id=id).first()
+
+    if not bookmark:
+        return jsonify({'message':'Item not found'}), HTTP_404_NOT_FOUND
+    
+    db.session.delete(bookmark)
+    db.session.commit()
+
+    return jsonify({}), HTTP_204_NO_CONTENT
