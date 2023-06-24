@@ -17,8 +17,9 @@ def get_all():
 
 #Creating an end point that handles two methods via route
 @bookmarks.route('/', methods=['POST', 'GET'])
-@jwt_required()
+#@jwt_required()
 def handle_bookmarks():
+    print(a)
     current_user = get_jwt_identity()
     #check the request method from the user
     if request.method == 'POST':

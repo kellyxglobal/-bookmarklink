@@ -1,3 +1,4 @@
+from src.constants.http_status_codes import HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR
 from flask import Flask, jsonify, redirect
 import os
 from src.auth import auth
@@ -42,7 +43,8 @@ def create_app(test_config=None):
     app.register_blueprint(auth)
     app.register_blueprint(bookmarks) 
 
-
+    #Tracking Which links we have visited or Not
+    #Link tracking to know how many time a user who created the link clicked on it.
     @app.get('/<short_url>')
     def redirect_to_url(short_url): 
         bookmark = Bookmark.query.filter_by(short_url=short_url).first_or_404()
@@ -51,5 +53,14 @@ def create_app(test_config=None):
             bookmark.visits = bookmark.visits+1
 
             return redirect(bookmark.url)
+
+    @app.errorhandler(HTTP_404_NOT_FOUND)
+    def handler_404(e):
+        return jsonify({'error': 'Not found'}), HTTP_404_NOT_FOUND
+    
+    @app.errorhandler(HTTP_500_INTERNAL_SERVER_ERROR)
+    def handler_500(e):
+        return jsonify({'error': 'Relax, something minor went wrong.'}), HTTP_500_INTERNAL_SERVER_ERROR
+    
     
     return app
