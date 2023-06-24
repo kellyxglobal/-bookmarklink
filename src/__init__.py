@@ -50,8 +50,8 @@ def create_app(test_config=None):
         bookmark = Bookmark.query.filter_by(short_url=short_url).first_or_404()
 
         if bookmark:
-            bookmark.visits = bookmark.visits+1
-
+            bookmark.visits = bookmark.visits + 1
+            db.session.commit()
             return redirect(bookmark.url)
 
     @app.errorhandler(HTTP_404_NOT_FOUND)
