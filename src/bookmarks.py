@@ -146,7 +146,7 @@ def editbookmark(id):
 
 
 
-#Deleting a retrieved single item.
+#Deleting a retrieved single item via delete method
 @bookmarks.delete("/<int:id>")
 @jwt_required()
 def delete_bookmark(id):
