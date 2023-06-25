@@ -28,16 +28,7 @@ git clone https://github.com/kellyxglobal/bookmarklink.git
 2. Navigate to the project directory:
 cd bookmarklink
 
-2. Install the required dependencies:
-"pip3 install virtualenv"
--Import the Microsoft GPG key by running the following command in the terminal:
-wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
-
--Enable the Visual Studio Code repository by running the following command:
-sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
-
--Update the package list by running:
-sudo apt update
+2. Install the required dependencies: pip install -r requirements.txt
 
 3. Set up the environment variables:
 -Create a .env file in the root directory of the project and define the following variables:
