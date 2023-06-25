@@ -1,0 +1,17 @@
+Redirects to a Ral URL
+
+---
+
+tags:
+  - Bookmarks
+parameters:
+  - in: path
+    name: short_url
+    required: true
+
+
+responses:
+  302:
+    description: Redirects users to the original link
+  404:
+    description: Response code that throws - records was not found

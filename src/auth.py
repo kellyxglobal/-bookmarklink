@@ -3,7 +3,7 @@ from flask import Blueprint, app, request, jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
 import validators
 from flask_jwt_extended import jwt_required, create_access_token, create_refresh_token, get_jwt_identity
-
+from flasgger import swag_from
 from src.database import User, db
 #Blueprint for users' authentication
 auth = Blueprint("auth", __name__, url_prefix="/api/v1/auth")
@@ -11,6 +11,7 @@ auth = Blueprint("auth", __name__, url_prefix="/api/v1/auth")
 
 #Tell a user that his data got submitted succesfully
 @auth.post('/register')
+@swag_from('./docs/auth/register.yaml')
 def register():
     username = request.json['username']
     email = request.json['email']
@@ -55,6 +56,7 @@ def register():
 #Get the current loged in user
 
 @auth.post('/login')
+@swag_from('./docs/auth/login.yaml')
 def login():
     email = request.json.get('email', '')
     password = request.json.get('password', '')
