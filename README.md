@@ -21,7 +21,7 @@ The Link Bookmarking API is a platform that allows users to save links for futur
 * -Contributing
 * -Licensing
 
-## Installation
+### Installation
 1. Clone the repository:
 git clone https://github.com/kellyxglobal/bookmarklink.git
 
